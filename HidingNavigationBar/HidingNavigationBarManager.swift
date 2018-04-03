@@ -324,7 +324,14 @@ open class HidingNavigationBarManager: NSObject, UIScrollViewDelegate, UIGesture
 			
 			// 6 - Update the shyViewController
 			_ = navBarController.updateYOffset(deltaY)
-			_ = tabBarController?.updateYOffset(deltaY)
+            let tabBarCoefficient = { () -> CGFloat in
+                if let tabBarController = tabBarController {
+                    return fabs(tabBarController.totalHeight() / navBarController.totalHeight())
+                } else {
+                    return 1.0
+                }
+            }()
+			_ = tabBarController?.updateYOffset(deltaY * tabBarCoefficient)
 		}
 		
 		// update content Inset
