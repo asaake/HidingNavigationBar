@@ -366,7 +366,7 @@ open class HidingNavigationBarManager: NSObject, UIScrollViewDelegate, UIGesture
 	fileprivate func updateScrollContentInsetTop(_ top: CGFloat) {
         let top = adjustTopInset(top)
         
-        let contentInset = UIEdgeInsets(top: top, left: scrollViewContentInset.top, bottom: scrollViewContentInset.left, right: scrollViewContentInset.right)
+        let contentInset = UIEdgeInsets(top: top, left: scrollViewContentInset.left, bottom: scrollViewContentInset.bottom, right: scrollViewContentInset.right)
         if delegate?.hidingNavigationBarManagerShouldUpdateScrollViewInsets(self, insets: contentInset) == false {
             return
         }
