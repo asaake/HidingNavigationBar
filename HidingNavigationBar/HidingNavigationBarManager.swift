@@ -323,7 +323,7 @@ open class HidingNavigationBarManager: NSObject, UIScrollViewDelegate, UIGesture
 			}
 			
 			// 6 - Update the shyViewController
-			_ = navBarController.updateYOffset(deltaY)
+            _ = navBarController.updateYOffset(deltaY)
             let tabBarCoefficient = { () -> CGFloat in
                 if let tabBarController = tabBarController {
                     return fabs(tabBarController.totalHeight() / navBarController.totalHeight())
@@ -331,11 +331,11 @@ open class HidingNavigationBarManager: NSObject, UIScrollViewDelegate, UIGesture
                     return 1.0
                 }
             }()
-			_ = tabBarController?.updateYOffset(deltaY * tabBarCoefficient)
+            _ = tabBarController?.updateYOffset(deltaY * tabBarCoefficient)
 		}
 		
 		// update content Inset
-		updateContentInsets()
+        updateContentInsets()
 		
 		previousYOffset = scrollView.contentOffset.y
 		
@@ -372,9 +372,7 @@ open class HidingNavigationBarManager: NSObject, UIScrollViewDelegate, UIGesture
         }
         
         if viewController.automaticallyAdjustsScrollViewInsets {
-            var contentInset = scrollViewContentInset
-            contentInset.top = top
-            scrollView.contentInset = contentInset
+            scrollView.contentInset.top = top
         }
         var scrollInsets = scrollView.scrollIndicatorInsets
         scrollInsets.top = top
