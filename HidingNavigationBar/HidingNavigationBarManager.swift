@@ -49,7 +49,7 @@ open class HidingNavigationBarManager: NSObject, UIScrollViewDelegate, UIGesture
 	unowned var viewController: UIViewController
 	
 	// The scrollView that will drive the contraction/expansion
-	unowned var scrollView: UIScrollView
+	unowned open fileprivate(set) var scrollView: UIScrollView
 	
 	// The extension view to be shown beneath the navbar
 	weak var extensionView: UIView?
@@ -73,7 +73,7 @@ open class HidingNavigationBarManager: NSObject, UIScrollViewDelegate, UIGesture
 	fileprivate var isUpdatingValues = false
 	
 	// Hiding navigation bar state
-	fileprivate var currentState = HidingNavigationBarState.Open
+	open fileprivate(set) var currentState = HidingNavigationBarState.Open
 	fileprivate var previousState = HidingNavigationBarState.Open
 	fileprivate var panGesture: UIPanGestureRecognizer?
     
