@@ -407,6 +407,7 @@ open class HidingNavigationBarManager: NSObject, UIScrollViewDelegate, UIGesture
 			UIView.animate(withDuration: 0.2, animations: {
 				self.updateScrollContentInsetTop(top)
 				self.scrollView.contentOffset = newContentOffset
+                self.handleScrolling()
 			})
             
             previousYOffset = CGFloat.nan
