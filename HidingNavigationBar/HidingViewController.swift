@@ -1,10 +1,27 @@
 //
 //  HidingViewController.swift
-//  Optimus
 //
-//  Created by Tristan Himmelman on 2015-03-17.
-//  Copyright (c) 2015 Hearst TV. All rights reserved.
+//  The MIT License (MIT)
 //
+//  Copyright (c) 2015 Tristan Himmelman
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 
 import UIKit
 
@@ -49,11 +66,11 @@ class HidingViewController {
 	}
 	
 	func isContracted() -> Bool {
-		return Float(fabs(view.center.y - contractedCenterValue().y)) < FLT_EPSILON
+		return Float(fabs(view.center.y - contractedCenterValue().y)) < .ulpOfOne
 	}
 	
 	func isExpanded() -> Bool {
-		return Float(fabs(view.center.y - expandedCenterValue().y)) < FLT_EPSILON
+		return Float(fabs(view.center.y - expandedCenterValue().y)) < .ulpOfOne
 	}
 	
 	func totalHeight() -> CGFloat {
@@ -90,7 +107,7 @@ class HidingViewController {
 
 		if alphaFadeEnabled {
 			var newAlpha: CGFloat = 1.0 - (expandedCenterValue().y - view.center.y) * 2 / contractionAmountValue()
-			newAlpha = CGFloat(min(max(FLT_EPSILON, Float(newAlpha)), 1.0))
+			newAlpha = CGFloat(min(max(.ulpOfOne, Float(newAlpha)), 1.0))
 			
 			updateSubviewsToAlpha(newAlpha)
 		}
@@ -105,7 +122,7 @@ class HidingViewController {
 		return residual;
 	}
 	
-	func snap(_ contract: Bool, completion:((Void) -> Void)!) -> CGFloat {
+    func snap(_ contract: Bool, completion:(() -> Void)!) -> CGFloat {
 		var deltaY: CGFloat = 0
 		
 		UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: {
@@ -162,6 +179,14 @@ class HidingViewController {
 	}
 	
 	// MARK: - Private methods
+    
+    // Recursively applies an operation to all views in a view hierarchy
+    fileprivate func applyToViewHierarchy(rootView: UIView, operation: (UIView) -> Void) {
+        operation(rootView)
+        rootView.subviews.forEach { view in
+            applyToViewHierarchy(rootView: view, operation: operation)
+        }
+    }
 	
 	fileprivate func updateSubviewsToAlpha(_ alpha: CGFloat) {
 		if navSubviews == nil {
@@ -170,18 +195,17 @@ class HidingViewController {
 			// loops through and subview and save the visible ones in navSubviews array
 			for subView in view.subviews {
 				let isBackgroundView = subView === view.subviews[0]
-				let isViewHidden = subView.isHidden || Float(subView.alpha) < FLT_EPSILON
+				let isViewHidden = subView.isHidden || Float(subView.alpha) < .ulpOfOne
 				
 				if isBackgroundView == false && isViewHidden == false {
 					navSubviews?.append(subView)
 				}
 			}
 		}
-		
-		if let subViews = navSubviews {
-			for subView in subViews {
-				subView.alpha = alpha
-			}
-		}
+        navSubviews?.forEach { subView in
+            applyToViewHierarchy(rootView: subView) { view in
+                view.alpha = alpha
+            }
+        }
 	}
 }

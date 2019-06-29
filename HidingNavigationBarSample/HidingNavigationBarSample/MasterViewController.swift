@@ -10,7 +10,7 @@ import UIKit
 
 class MasterViewController: UITableViewController {
 	
-	let rows = ["Hiding Nav Bar", "Hiding Nav Bar + Extension View", "Hiding Nav Bar + Toolbar", "Hiding Nav Bar + TabBar"]
+	let rows = ["Hiding Nav Bar", "Hiding Nav Bar + Extension View", "Hiding Nav Bar + Toolbar", "Hiding Nav Bar + TabBar", "Hidden Shows NavBar + InteractivePopGestureRecognizer"]
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -23,7 +23,7 @@ class MasterViewController: UITableViewController {
 	
 	func styleNavigationController(_ navigationController: UINavigationController){
 		navigationController.navigationBar.isTranslucent = true
-		navigationController.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+        navigationController.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
 		navigationController.navigationBar.tintColor = UIColor.white
 		navigationController.navigationBar.barTintColor = UIColor(red: 41/255, green: 141/255, blue: 250/255, alpha: 1)
 	}
@@ -65,7 +65,7 @@ class MasterViewController: UITableViewController {
 		} else if (indexPath as NSIndexPath).row == 2 {
 			let controller = HidingNavToolbarViewController()
 			navigationController?.pushViewController(controller, animated: true)
-		} else {
+		} else if (indexPath as NSIndexPath).row == 3 {
 			let controller1 = HidingNavTabViewController()
 			let navController1 = UINavigationController(rootViewController: controller1)
 			navController1.tabBarItem = UITabBarItem(tabBarSystemItem: .mostRecent, tag: 0)
@@ -78,8 +78,13 @@ class MasterViewController: UITableViewController {
 			let tabBarController = UITabBarController()
 			tabBarController.viewControllers = [navController1, navController2]
 			navigationController?.present(tabBarController, animated: true, completion: nil)
+		} else {
+			let controller = HiddenNavViewController()
+			let navController = UINavigationController(rootViewController: controller)
+			navController.interactivePopGestureRecognizer?.delegate = InteractivePopGestureRecognizerDelegate()
+			styleNavigationController(navController)
+			navigationController?.present(navController, animated: true, completion: nil)
 		}
-		
 
 	}
 }
