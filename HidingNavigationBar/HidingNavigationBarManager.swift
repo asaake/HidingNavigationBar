@@ -250,6 +250,10 @@ open class HidingNavigationBarManager: NSObject, UIScrollViewDelegate, UIGesture
 		if UIApplication.shared.isStatusBarHidden {
 			return 0
 		}
+        
+        if self.viewController.modalPresentationStyle == .pageSheet {
+            return 0
+        }
 		
 		let statusBarSize = UIApplication.shared.statusBarFrame.size
 		return min(statusBarSize.width, statusBarSize.height)
