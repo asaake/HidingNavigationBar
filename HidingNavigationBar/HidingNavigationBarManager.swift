@@ -79,6 +79,9 @@ open class HidingNavigationBarManager: NSObject, UIScrollViewDelegate, UIGesture
     
 	//Options
 	open var onForegroundAction = HidingNavigationForegroundAction.default
+    
+    // StatusBar Hidden (PageSheet or PageForm etc...)
+    private let isStatusBarHidden: Bool
 	
 	public init(viewController: UIViewController, scrollView: UIScrollView){
 		if viewController.navigationController == nil || viewController.navigationController?.navigationBar == nil {
@@ -87,6 +90,7 @@ open class HidingNavigationBarManager: NSObject, UIScrollViewDelegate, UIGesture
         
         viewController.extendedLayoutIncludesOpaqueBars = true
         
+        self.isStatusBarHidden = viewController.navigationController!.childForStatusBarHidden != nil
 		self.viewController = viewController
 		self.scrollView = scrollView
 		
@@ -251,7 +255,7 @@ open class HidingNavigationBarManager: NSObject, UIScrollViewDelegate, UIGesture
 			return 0
 		}
         
-        if self.viewController.modalPresentationStyle == .pageSheet {
+        if self.isStatusBarHidden {
             return 0
         }
 		
